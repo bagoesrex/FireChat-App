@@ -28,25 +28,31 @@ class _AuthScreenState extends State<AuthScreen> {
 
     _formKey.currentState!.save();
 
-    if (_isLogin) {
-      // login code
-    } else {
-      // signup code
-      try {
+    try {
+      if (_isLogin) {
+        // login code
+        final userCredential = await _firebase.signInWithEmailAndPassword(
+          email: _enteredEmail,
+          password: _enteredPassword,
+        );
+        print(userCredential);
+      } else {
+        // signup code
+
         final userCredential = await _firebase.createUserWithEmailAndPassword(
           email: _enteredEmail,
           password: _enteredPassword,
         );
         print(userCredential);
-      } on FirebaseAuthException catch (error) {
-        if (error.code == 'email-already-in-use') {
-          // uimpl
-        }
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error.message.toString() ?? 'Gagal Auth')),
-        );
       }
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'email-already-in-use') {
+        // uimpl
+      }
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error.message ?? 'Gagal Auth')));
     }
   }
 
