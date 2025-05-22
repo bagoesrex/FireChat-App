@@ -24,7 +24,9 @@ class ChatScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(children: const [ChatMessages(), NewMessages()]),
+      body: Column(
+        children: const [Expanded(child: ChatMessages()), NewMessages()],
+      ),
     );
   }
 }
